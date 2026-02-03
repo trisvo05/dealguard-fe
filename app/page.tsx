@@ -41,7 +41,7 @@ export default function DealGuardLanding() {
       </header>
 
       {/* --- HERO SECTION --- */}
-      <section className="pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden relative">
+      <section className="pt-32 pb-20 md:pt-40 md:pb-32 h-100vh overflow-hidden mt-[calc(-50px)] relative">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
 
@@ -51,7 +51,7 @@ export default function DealGuardLanding() {
                 <Lock className="w-3 h-3" /> Nền tảng Escrow B2B On-chain
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#003366] leading-[1.15]">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#003366] leading-[1.15]">
                 Bảo vệ dòng vốn, <br />
                 <span className="text-blue-600">Xóa bỏ rủi ro</span> pháp lý.
               </h1>
@@ -86,50 +86,81 @@ export default function DealGuardLanding() {
 
               {/* Main Card */}
               <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 p-6 md:p-8 relative z-10 max-w-md mx-auto">
+                {/* Header: Smart Contract Info */}
                 <div className="flex justify-between items-start mb-8 pb-6 border-b border-slate-100">
                   <div>
-                    <p className="text-xs text-slate-500 uppercase font-bold tracking-wide mb-1">Hợp đồng #8821</p>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] bg-blue-100 text-[#003366] px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                        Mainnet
+                      </span>
+                      <p className="text-xs text-slate-500 font-mono">0x7a1b...4f21</p>
+                    </div>
                     <h3 className="text-[#003366] font-bold text-lg">Cung ứng thiết bị IoT - GĐ 1</h3>
                   </div>
-                  <div className="bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-green-100">
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    Đã ký quỹ (Locked)
+                  <div className="bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-emerald-100">
+                    <Lock className="w-3.5 h-3.5" />
+                    Escrow Secured
                   </div>
                 </div>
 
                 <div className="space-y-6">
-                  <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-                    <p className="text-sm text-slate-500 font-medium mb-1">Giá trị đang khóa</p>
-                    <p className="text-3xl md:text-4xl font-bold text-[#003366] tracking-tight">
-                      2.500.000.000 <span className="text-lg text-slate-400 font-normal">VND</span>
+                  {/* Value Section: Stablecoin Focus */}
+                  <div className="bg-slate-50 p-5 rounded-xl border border-slate-100 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-2 opacity-10">
+                      <Shield className="w-12 h-12 text-[#003366]" />
+                    </div>
+                    <p className="text-sm text-slate-500 font-medium mb-1">Tổng giá trị ký quỹ (TVL)</p>
+                    <div className="flex items-baseline gap-2">
+                      <p className="text-3xl md:text-4xl font-bold text-[#003366] tracking-tight">
+                        100.000
+                      </p>
+                      <span className="text-lg text-blue-600 font-bold">USDT</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 mt-1 font-medium italic">
+                      ≈ 2.540.000.000 VND (Oracle by Chainlink)
                     </p>
                   </div>
 
+                  {/* Milestone Section: Proof of Work */}
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-semibold text-slate-700">Tiến độ nghiệm thu</span>
-                      <span className="text-sm font-bold text-[#003366]">75%</span>
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-sm font-semibold text-slate-700">Milestone: 03/04</span>
+                      <span className="text-xs font-bold py-1 px-2 bg-blue-50 text-blue-700 rounded-md">
+                        Đang thẩm định
+                      </span>
                     </div>
                     <div className="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
-                      <div className="bg-[#003366] h-full rounded-full w-3/4"></div>
+                      <div className="bg-blue-600 h-full rounded-full w-3/4 animate-pulse-slow"></div>
                     </div>
-                    <div className="flex justify-between mt-2 text-xs text-slate-500">
-                      <span>Start</span>
-                      <span>Milestone 1</span>
-                      <span>Milestone 2</span>
-                      <span className="text-[#003366] font-bold">Hoàn tất</span>
+                    <div className="flex justify-between mt-3 text-[10px] font-bold uppercase tracking-tighter text-slate-400">
+                      <span className="text-emerald-600 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" /> Deposit
+                      </span>
+                      <span className="text-emerald-600 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" /> MS 1
+                      </span>
+                      <span className="text-[#003366] flex items-center gap-1 border-b-2 border-[#003366]">
+                        MS 2
+                      </span>
+                      <span>Release</span>
                     </div>
                   </div>
                 </div>
 
+                {/* Actions: Web3 Interactions */}
                 <div className="mt-8 grid grid-cols-2 gap-3">
-                  <button className="bg-slate-100 text-slate-400 text-sm font-bold py-3 rounded-lg cursor-not-allowed flex justify-center items-center gap-2">
-                    <AlertTriangle className="w-4 h-4" /> Khiếu nại
+                  <button className="bg-white border border-red-200 text-red-500 text-sm font-bold py-3 rounded-lg hover:bg-red-50 transition-colors flex justify-center items-center gap-2">
+                    <Scale className="w-4 h-4" /> Khiếu nại (Dispute)
                   </button>
-                  <button className="bg-[#003366] text-white text-sm font-bold py-3 rounded-lg hover:bg-[#002244] shadow-md transition-colors">
-                    Xác nhận giải ngân
+                  <button className="bg-[#003366] text-white text-sm font-bold py-3 rounded-lg hover:bg-[#002244] shadow-lg shadow-blue-900/20 transition-all flex justify-center items-center gap-2">
+                    Phê duyệt giải ngân
                   </button>
                 </div>
+
+                {/* Footer Card: Trust Signal */}
+                <p className="text-center text-[10px] text-slate-400 mt-4 flex items-center justify-center gap-1">
+                  <Shield className="w-3 h-3" /> Hợp đồng được bảo mật bởi DealGuard Protocol
+                </p>
               </div>
             </div>
           </div>
