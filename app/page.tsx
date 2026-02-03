@@ -12,6 +12,7 @@ import {
   FileText,
   ChevronRight
 } from 'lucide-react';
+import Link from 'next/link';
 
 export default function DealGuardLanding() {
   return (
@@ -31,6 +32,7 @@ export default function DealGuardLanding() {
             <a href="#problems" className="hover:text-[#003366] transition-colors">Vấn đề</a>
             <a href="#solution" className="hover:text-[#003366] transition-colors">Giải pháp</a>
             <a href="#how-it-works" className="hover:text-[#003366] transition-colors">Quy trình</a>
+            <Link href="/dashboard" className="hover:text-[#003366] transition-colors">Dashboard(tạm thời)</Link>
           </nav>
 
           <button className="bg-[#003366] hover:bg-[#002244] text-white px-5 py-2.5 rounded-md text-sm font-semibold transition-all shadow-md flex items-center gap-2">
