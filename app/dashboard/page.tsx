@@ -1,5 +1,6 @@
 'use client';
-import React, { useState, useMemo, useEffect } from 'react';
+
+import React, { useState, useMemo } from 'react';
 import { Table, Tag, Button, Tabs, Card, Statistic, Space, ConfigProvider } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
@@ -10,6 +11,7 @@ import {
     CheckCircleOutlined,
     ClockCircleOutlined
 } from '@ant-design/icons';
+import { DealTimeline } from '@/components/DealTimeline';
 
 // Define Types
 interface Transaction {
@@ -33,17 +35,16 @@ const mockData: { asBuyer: Transaction[]; asSeller: Transaction[] } = {
     ]
 };
 
+import { useAuth } from '@/hooks/useAuth';
+
+// ... (existing code)
+
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('buyer');
-    const [address, setAddress] = useState<string | null>(null);
-
-    useEffect(() => {
-        // Hydrate address from localStorage on client side
-        const storedAddress = window.localStorage.getItem("sui_address");
-        if (storedAddress) {
-            setAddress(storedAddress);
-        }
-    }, []);
+    const { address } = useAuth(); // Use unified auth hook
+    const [demoStep, setDemoStep] = useState(1); // Default to "Shipping" step
+    
+    // address is now managed by useAuth, so manual localStorage effect is removed
 
     // Columns definition wrapped in useMemo to prevent unnecessary re-renders
     const columns: ColumnsType<Transaction> = useMemo(() => [
@@ -140,6 +141,32 @@ const Dashboard = () => {
                         <Statistic title="Expiring Soon" value={1} styles={{ content: { color: '#faad14', fontWeight: 'bold' } }} />
                     </Card>
                 </div>
+
+                {/* Live Deal Timeline Demo */}
+                <Card className="mb-8 shadow-md rounded-xl border-none overflow-hidden relative">
+                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                         <ClockCircleOutlined className="text-6xl text-[#003366]" />
+                    </div>
+                    <div className="mb-6">
+                         <div className="flex justify-between items-center mb-2">
+                             <div>
+                                 <h3 className="text-lg font-bold text-[#003366] m-0">Live Deal Status: IoT Device Supply Chain</h3>
+                                 <p className="text-gray-500 text-xs m-0">Contract: 0x8a...9f21</p>
+                             </div>
+                             <Button 
+                                size="small" 
+                                onClick={() => {
+                                    setDemoStep((prev) => (prev + 1) > 3 ? 0 : prev + 1);
+                                }}
+                             >
+                                Simulate Signal
+                             </Button>
+                         </div>
+                         <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                             <DealTimeline currentStep={demoStep} />
+                         </div>
+                    </div>
+                </Card>
 
                 {/* Main Content */}
                 <Card className="shadow-md rounded-xl border-none">

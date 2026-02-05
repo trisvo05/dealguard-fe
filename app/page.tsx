@@ -247,12 +247,12 @@ export default function DealGuardLanding() {
             <div className="md:w-1/2 grid gap-6">
               <div className="bg-[#004488]/30 backdrop-blur-md p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors">
                 <Building2 className="w-10 h-10 text-blue-300 mb-4" />
-                <h4 className="font-bold text-xl mb-2">Cho Người Mua (Buyer)</h4>
+                <h4 className="font-bold text-xl mb-2">Cho Người mua (Buyer)</h4>
                 <p className="text-sm text-blue-100 opacity-80">Chỉ trả tiền khi nhận được kết quả đúng cam kết. Không lo mất cọc.</p>
               </div>
               <div className="bg-[#004488]/30 backdrop-blur-md p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors">
                 <Wallet className="w-10 h-10 text-blue-300 mb-4" />
-                <h4 className="font-bold text-xl mb-2">Cho Người Bán (Seller)</h4>
+                <h4 className="font-bold text-xl mb-2">Cho Người bán (Seller)</h4>
                 <p className="text-sm text-blue-100 opacity-80">Đảm bảo nhận được tiền ngay khi hoàn thành công việc. Không bị nợ xấu.</p>
               </div>
             </div>

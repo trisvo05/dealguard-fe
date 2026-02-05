@@ -1,59 +1,70 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCurrentAccount, useDisconnectWallet } from '@mysten/dapp-kit';
 
 const EXPIRATION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 export function useAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [address, setAddress] = useState<string | null>(null);
+  const [zkAuthenticated, setZkAuthenticated] = useState(false);
+  const [zkAddress, setZkAddress] = useState<string | null>(null);
+  
+  const currentAccount = useCurrentAccount();
+  const { mutate: disconnect } = useDisconnectWallet();
   const router = useRouter();
 
-  const logout = useCallback(() => {
-    window.localStorage.removeItem("sui_address");
-    window.localStorage.removeItem("zklogin_jwt");
-    window.localStorage.removeItem("zklogin_user_salt");
-    window.localStorage.removeItem("auth_expiry");
-    
-    setIsAuthenticated(false);
-    setAddress(null);
-    router.push("/");
-  }, [router]);
+  // Unified State
+  const isAuthenticated = !!currentAccount || zkAuthenticated;
+  const address = currentAccount?.address || zkAddress;
 
-  const checkAuth = useCallback(() => {
+  const logout = useCallback(() => {
+    if (currentAccount) {
+        disconnect();
+    } else {
+        window.localStorage.removeItem("sui_address");
+        window.localStorage.removeItem("zklogin_jwt");
+        window.localStorage.removeItem("zklogin_user_salt");
+        window.localStorage.removeItem("auth_expiry");
+        
+        setZkAuthenticated(false);
+        setZkAddress(null);
+    }
+    router.push("/");
+  }, [currentAccount, disconnect, router]);
+
+  const checkZkAuth = useCallback(() => {
     const storedAddress = window.localStorage.getItem("sui_address");
     const expiry = window.localStorage.getItem("auth_expiry");
 
     if (storedAddress && expiry) {
       if (Date.now() < parseInt(expiry, 10)) {
-        setIsAuthenticated(true);
-        setAddress(storedAddress);
+        setZkAuthenticated(true);
+        setZkAddress(storedAddress);
       } else {
-        logout(); // Expired
+        // Only logout if it was a ZK session
+        window.localStorage.removeItem("sui_address"); 
+        setZkAuthenticated(false);
+        setZkAddress(null);
       }
-    } else {
-      setIsAuthenticated(false);
-      setAddress(null);
     }
-  }, [logout]);
+  }, []);
 
   useEffect(() => {
-    // Wrap in timeout to avoid synchronous setState warning during render
     const timer = setTimeout(() => {
-        checkAuth();
+        checkZkAuth();
     }, 0);
     return () => clearTimeout(timer);
-  }, [checkAuth]);
+  }, [checkZkAuth]);
 
-  const login = (address: string, idToken: string, salt: string) => {
+  const loginZk = (address: string, idToken: string, salt: string) => {
     const expiry = (Date.now() + EXPIRATION_DURATION).toString();
     window.localStorage.setItem("sui_address", address);
     window.localStorage.setItem("zklogin_jwt", idToken);
     window.localStorage.setItem("zklogin_user_salt", salt);
     window.localStorage.setItem("auth_expiry", expiry);
     
-    setIsAuthenticated(true);
-    setAddress(address);
+    setZkAuthenticated(true);
+    setZkAddress(address);
   };
 
-  return { isAuthenticated, address, login, logout };
+  return { isAuthenticated, address, login: loginZk, logout };
 }
