@@ -1,8 +1,6 @@
-import Header from "@/components/header";
 import "./globals.css";
-import Footer from "@/components/footer";
-// import Header from "@/components/layout/Header";
-// import Footer from "@/components/layout/Footer";
+import { Providers } from "./providers";
+import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 export default function RootLayout({
   children,
@@ -11,10 +9,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
-      <body className="antialiased ">
-
-        {children}
-
+       <body className="antialiased ">
+        <AntdRegistry>
+          <Providers>
+            {children}
+          </Providers>
+        </AntdRegistry>
       </body>
     </html>
   );

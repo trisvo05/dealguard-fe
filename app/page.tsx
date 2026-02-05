@@ -8,11 +8,11 @@ import {
   Building2,
   Scale,
   Clock,
-  AlertTriangle,
   FileText,
   ChevronRight
 } from 'lucide-react';
 import Link from 'next/link';
+import { LoginButton } from '@/components/LoginButton';
 
 export default function DealGuardLanding() {
   return (
@@ -32,13 +32,10 @@ export default function DealGuardLanding() {
             <a href="#problems" className="hover:text-[#003366] transition-colors">Vấn đề</a>
             <a href="#solution" className="hover:text-[#003366] transition-colors">Giải pháp</a>
             <a href="#how-it-works" className="hover:text-[#003366] transition-colors">Quy trình</a>
-            <Link href="/dashboard" className="hover:text-[#003366] transition-colors">Dashboard(tạm thời)</Link>
+            <Link href="/dashboard" className="hover:text-[#003366] transition-colors">Dashboard</Link>
           </nav>
 
-          <button className="bg-[#003366] hover:bg-[#002244] text-white px-5 py-2.5 rounded-md text-sm font-semibold transition-all shadow-md flex items-center gap-2">
-            <Wallet className="w-4 h-4" />
-            Kết nối ví
-          </button>
+          <LoginButton />
         </div>
       </header>
 
@@ -223,7 +220,7 @@ export default function DealGuardLanding() {
           <div className="flex flex-col md:flex-row items-center gap-16">
             <div className="md:w-1/2">
               <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-snug">
-                Chuyển từ "Đối đầu pháp lý" sang <span className="text-blue-300">"Tuân thủ kỹ thuật"</span>
+                Chuyển từ &quot;Đối đầu pháp lý&quot; sang <span className="text-blue-300">&quot;Tuân thủ kỹ thuật&quot;</span>
               </h2>
               <p className="text-blue-100 text-lg mb-8 leading-relaxed opacity-90">
                 DealGuard sử dụng Smart Contract để đóng băng rủi ro. Tiền và Hàng hóa/Dịch vụ được trao đổi đồng thời dựa trên các điều kiện đã lập trình sẵn, không phụ thuộc vào ý chí chủ quan.
@@ -250,12 +247,12 @@ export default function DealGuardLanding() {
             <div className="md:w-1/2 grid gap-6">
               <div className="bg-[#004488]/30 backdrop-blur-md p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors">
                 <Building2 className="w-10 h-10 text-blue-300 mb-4" />
-                <h4 className="font-bold text-xl mb-2">Cho Người Mua (Buyer)</h4>
+                <h4 className="font-bold text-xl mb-2">Cho Người mua (Buyer)</h4>
                 <p className="text-sm text-blue-100 opacity-80">Chỉ trả tiền khi nhận được kết quả đúng cam kết. Không lo mất cọc.</p>
               </div>
               <div className="bg-[#004488]/30 backdrop-blur-md p-6 rounded-xl border border-white/10 hover:border-white/30 transition-colors">
                 <Wallet className="w-10 h-10 text-blue-300 mb-4" />
-                <h4 className="font-bold text-xl mb-2">Cho Người Bán (Seller)</h4>
+                <h4 className="font-bold text-xl mb-2">Cho Người bán (Seller)</h4>
                 <p className="text-sm text-blue-100 opacity-80">Đảm bảo nhận được tiền ngay khi hoàn thành công việc. Không bị nợ xấu.</p>
               </div>
             </div>
