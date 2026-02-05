@@ -1,18 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Layout, Menu, Button, Avatar, Dropdown, ConfigProvider, theme } from 'antd';
+import { Layout, Menu, Button, ConfigProvider, theme } from 'antd';
 import { usePathname, useRouter } from 'next/navigation';
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     DashboardOutlined,
-    TransactionOutlined,
-    SafetyCertificateOutlined,
-    UserOutlined,
+    HistoryOutlined,
     SettingOutlined,
-    LogoutOutlined,
-    HistoryOutlined
+    SafetyCertificateOutlined,
+    PlusOutlined
 } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -38,32 +36,27 @@ export default function DashboardLayout({
         {
             key: '/dashboard',
             icon: <DashboardOutlined />,
-            label: 'Overview',
+            label: 'Tổng quan',
         },
+        // Removed 'Create Transaction' from menu items as per user request
         {
             key: '/dashboard/escrow',
             icon: <SafetyCertificateOutlined />,
-            label: 'My Escrows',
+            label: 'Escrow của tôi',
         },
         {
             key: '/dashboard/history',
             icon: <HistoryOutlined />,
-            label: 'Transaction History',
+            label: 'Lịch sử giao dịch',
         },
         {
             key: '/dashboard/settings',
             icon: <SettingOutlined />,
-            label: 'Settings',
-        },
+            label: 'Cài đặt',
+        }
     ];
 
-    // Menu Dropdown cho User
-    const userMenu = (
-        <Menu items={[
-            { key: '1', label: 'Profile', icon: <UserOutlined /> },
-            { key: '2', label: 'Logout', icon: <LogoutOutlined />, danger: true },
-        ]} />
-    );
+    // userMenu was unused and has been removed for cleanup
 
     return (
         <ConfigProvider
@@ -73,15 +66,15 @@ export default function DashboardLayout({
                 },
             }}
         >
-            <Layout className="h-screen">
+            <Layout className="h-screen overflow-hidden">
                 {/* SIDEBAR */}
                 <Sider
                     trigger={null}
                     collapsible
                     collapsed={collapsed}
                     width={260}
-                    className="shadow-xl z-20"
-                    style={{ background: '#002244' }} // Màu nền tối hơn brand color một chút cho Sidebar
+                    className="shadow-xl z-20 relative" // Added relative for absolute positioning of children
+                    style={{ background: '#002244' }}
                 >
                     {/* Logo Area */}
                     <div className="h-16 flex items-center justify-center border-b border-gray-700/50">
@@ -104,14 +97,39 @@ export default function DashboardLayout({
                         style={{ background: 'transparent', marginTop: '10px' }}
                         className="custom-sidebar-menu"
                     />
+                    
+                    {/* Bottom Left Floating Button (Create) - Symmetric to Chat Button */}
+                    <div className="absolute bottom-8 left-0 w-full flex justify-center z-50">
+                        {collapsed ? (
+                             <Button 
+                                type="primary" 
+                                shape="circle" 
+                                size="large"
+                                icon={<PlusOutlined />}
+                                className="bg-gradient-to-r from-blue-500 to-cyan-400 border-none shadow-lg hover:scale-110 transition-transform"
+                                onClick={() => router.push('/dashboard/create')}
+                                title="Tạo giao dịch mới"
+                             />
+                        ) : (
+                             <Button 
+                                type="primary" 
+                                size="large"
+                                icon={<PlusOutlined />}
+                                className="w-4/5 bg-gradient-to-r from-blue-500 to-cyan-400 border-none shadow-lg hover:scale-105 transition-transform font-bold h-12 rounded-full"
+                                onClick={() => router.push('/dashboard/create')}
+                             >
+                                Tạo Giao dịch
+                            </Button>
+                        )}
+                    </div>
                 </Sider>
 
                 {/* MAIN LAYOUT */}
-                <Layout>
+                <Layout className="flex flex-col h-full overflow-hidden">
                     {/* HEADER */}
                     <Header
                         style={{ padding: 0, background: colorBgContainer }}
-                        className="flex items-center justify-between sticky top-0 z-10 shadow-sm px-4"
+                        className="flex items-center justify-between shadow-sm px-4 shrink-0"
                     >
                         <Button
                             type="text"
@@ -124,8 +142,9 @@ export default function DashboardLayout({
 
                     {/* CONTENT AREA */}
                     <Content
+                        className="overflow-y-auto flex-1 p-6"
                         style={{
-                            margin: '24px 16px',
+                            // Removed margin to let scrollbar fit edge, using padding instead
                             minHeight: 280,
                         }}
                     >

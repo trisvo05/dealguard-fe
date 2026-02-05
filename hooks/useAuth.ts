@@ -16,44 +16,54 @@ export function useAuth() {
   const isAuthenticated = !!currentAccount || zkAuthenticated;
   const address = currentAccount?.address || zkAddress;
 
-  const logout = useCallback(() => {
+  // 1. Monitor Standard Wallet and sync to LocalStorage for 24h persistence
+  useEffect(() => {
     if (currentAccount) {
-        disconnect();
-    } else {
-        window.localStorage.removeItem("sui_address");
-        window.localStorage.removeItem("zklogin_jwt");
-        window.localStorage.removeItem("zklogin_user_salt");
-        window.localStorage.removeItem("auth_expiry");
-        
-        setZkAuthenticated(false);
-        setZkAddress(null);
+        const expiry = (Date.now() + EXPIRATION_DURATION).toString();
+        window.localStorage.setItem("sui_address", currentAccount.address);
+        window.localStorage.setItem("auth_expiry", expiry);
+        window.localStorage.setItem("auth_type", "wallet");
     }
-    router.push("/");
-  }, [currentAccount, disconnect, router]);
+  }, [currentAccount]);
 
-  const checkZkAuth = useCallback(() => {
+  const logout = useCallback(() => {
+    disconnect();
+    window.localStorage.removeItem("sui_address");
+    window.localStorage.removeItem("zklogin_jwt");
+    window.localStorage.removeItem("zklogin_user_salt");
+    window.localStorage.removeItem("auth_expiry");
+    window.localStorage.removeItem("auth_type");
+    
+    setZkAuthenticated(false);
+    setZkAddress(null);
+    router.push("/");
+  }, [disconnect, router]);
+
+  const checkAuthPersistence = useCallback(() => {
     const storedAddress = window.localStorage.getItem("sui_address");
     const expiry = window.localStorage.getItem("auth_expiry");
+    const type = window.localStorage.getItem("auth_type");
 
     if (storedAddress && expiry) {
       if (Date.now() < parseInt(expiry, 10)) {
-        setZkAuthenticated(true);
-        setZkAddress(storedAddress);
+        if (type === "zk") {
+          setZkAuthenticated(true);
+          setZkAddress(storedAddress);
+        }
+        // For 'wallet' type, dapp-kit's autoConnect will handle currentAccount
       } else {
-        // Only logout if it was a ZK session
-        window.localStorage.removeItem("sui_address"); 
-        setZkAuthenticated(false);
-        setZkAddress(null);
+        // Session expired
+        logout();
       }
     }
-  }, []);
+  }, [logout]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-        checkZkAuth();
+      checkAuthPersistence();
     }, 0);
     return () => clearTimeout(timer);
-  }, [checkZkAuth]);
+  }, [checkAuthPersistence]);
 
   const loginZk = (address: string, idToken: string, salt: string) => {
     const expiry = (Date.now() + EXPIRATION_DURATION).toString();
@@ -61,6 +71,7 @@ export function useAuth() {
     window.localStorage.setItem("zklogin_jwt", idToken);
     window.localStorage.setItem("zklogin_user_salt", salt);
     window.localStorage.setItem("auth_expiry", expiry);
+    window.localStorage.setItem("auth_type", "zk");
     
     setZkAuthenticated(true);
     setZkAddress(address);

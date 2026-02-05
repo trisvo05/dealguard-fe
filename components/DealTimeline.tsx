@@ -8,10 +8,10 @@ interface DealTimelineProps {
 }
 
 const STEPS = [
-  { id: 0, title: 'Đặt cọc', description: 'Buyer deposits funds' },
-  { id: 1, title: 'Đang vận chuyển', description: 'Seller ships goods' },
-  { id: 2, title: 'Đã nhận hàng', description: 'Buyer verifies goods' },
-  { id: 3, title: 'Hoàn tất', description: 'Funds released to Seller' },
+  { id: 0, title: 'Đặt cọc', description: 'Buyer nạp tiền vào hợp đồng' },
+  { id: 1, title: 'Đang vận chuyển', description: 'Seller giao hàng' },
+  { id: 2, title: 'Đã nhận hàng', description: 'Buyer kiểm tra hàng' },
+  { id: 3, title: 'Hoàn tất', description: 'Giải ngân cho Seller' },
 ];
 
 export function DealTimeline({ currentStep }: DealTimelineProps) {
