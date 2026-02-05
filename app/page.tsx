@@ -8,7 +8,6 @@ import {
   Building2,
   Scale,
   Clock,
-  AlertTriangle,
   FileText,
   ChevronRight
 } from 'lucide-react';
@@ -221,7 +220,7 @@ export default function DealGuardLanding() {
           <div className="flex flex-col md:flex-row items-center gap-16">
             <div className="md:w-1/2">
               <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-snug">
-                Chuyển từ "Đối đầu pháp lý" sang <span className="text-blue-300">"Tuân thủ kỹ thuật"</span>
+                Chuyển từ &quot;Đối đầu pháp lý&quot; sang <span className="text-blue-300">&quot;Tuân thủ kỹ thuật&quot;</span>
               </h2>
               <p className="text-blue-100 text-lg mb-8 leading-relaxed opacity-90">
                 DealGuard sử dụng Smart Contract để đóng băng rủi ro. Tiền và Hàng hóa/Dịch vụ được trao đổi đồng thời dựa trên các điều kiện đã lập trình sẵn, không phụ thuộc vào ý chí chủ quan.

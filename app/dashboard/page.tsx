@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useMemo, useEffect } from 'react';
-import { Table, Tag, Button, Tabs, Card, Statistic, Space, ConfigProvider, theme } from 'antd';
+import { Table, Tag, Button, Tabs, Card, Statistic, Space, ConfigProvider } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
     WalletOutlined,
@@ -38,6 +38,7 @@ const Dashboard = () => {
     const [address, setAddress] = useState<string | null>(null);
 
     useEffect(() => {
+        // Hydrate address from localStorage on client side
         const storedAddress = window.localStorage.getItem("sui_address");
         if (storedAddress) {
             setAddress(storedAddress);
@@ -143,7 +144,7 @@ const Dashboard = () => {
                 {/* Main Content */}
                 <Card className="shadow-md rounded-xl border-none">
                     <Tabs
-                        defaultActiveKey="buyer"
+                        activeKey={activeTab} // Use controlled state
                         onChange={(key) => setActiveTab(key)}
                         items={[
                             {

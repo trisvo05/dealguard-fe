@@ -1,6 +1,5 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { prepareGoogleLogin } from "@/utils/zklogin";
 import { Button, Dropdown, Avatar } from "antd";
 import { GoogleOutlined, UserOutlined, LogoutOutlined, DashboardOutlined } from "@ant-design/icons";

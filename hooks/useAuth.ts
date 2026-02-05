@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 const EXPIRATION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
@@ -8,16 +8,23 @@ export function useAuth() {
   const [address, setAddress] = useState<string | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const logout = useCallback(() => {
+    window.localStorage.removeItem("sui_address");
+    window.localStorage.removeItem("zklogin_jwt");
+    window.localStorage.removeItem("zklogin_user_salt");
+    window.localStorage.removeItem("auth_expiry");
+    
+    setIsAuthenticated(false);
+    setAddress(null);
+    router.push("/");
+  }, [router]);
 
-  const checkAuth = () => {
+  const checkAuth = useCallback(() => {
     const storedAddress = window.localStorage.getItem("sui_address");
     const expiry = window.localStorage.getItem("auth_expiry");
 
     if (storedAddress && expiry) {
-      if (Date.now() < parseInt(expiry)) {
+      if (Date.now() < parseInt(expiry, 10)) {
         setIsAuthenticated(true);
         setAddress(storedAddress);
       } else {
@@ -27,7 +34,15 @@ export function useAuth() {
       setIsAuthenticated(false);
       setAddress(null);
     }
-  };
+  }, [logout]);
+
+  useEffect(() => {
+    // Wrap in timeout to avoid synchronous setState warning during render
+    const timer = setTimeout(() => {
+        checkAuth();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [checkAuth]);
 
   const login = (address: string, idToken: string, salt: string) => {
     const expiry = (Date.now() + EXPIRATION_DURATION).toString();
@@ -38,17 +53,6 @@ export function useAuth() {
     
     setIsAuthenticated(true);
     setAddress(address);
-  };
-
-  const logout = () => {
-    window.localStorage.removeItem("sui_address");
-    window.localStorage.removeItem("zklogin_jwt");
-    window.localStorage.removeItem("zklogin_user_salt");
-    window.localStorage.removeItem("auth_expiry");
-    
-    setIsAuthenticated(false);
-    setAddress(null);
-    router.push("/");
   };
 
   return { isAuthenticated, address, login, logout };

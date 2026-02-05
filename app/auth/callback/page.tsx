@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { decodeJwt } from "jose";
-import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { genAddressSeed, getZkLoginSignature, jwtToAddress } from "@mysten/zklogin";
+import { genAddressSeed, jwtToAddress } from "@mysten/zklogin";
 import { notification, Spin } from "antd";
 
 export default function AuthCallback() {
@@ -82,7 +81,7 @@ export default function AuthCallback() {
 
       } catch (error: any) {
         console.error(error);
-        setStatus("Login Error: " + error.message);
+        setStatus("Login Error: " + (error?.message || "Unknown error"));
       }
     };
 
