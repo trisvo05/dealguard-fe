@@ -23,6 +23,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useCurrentAccount, useSignAndExecuteTransaction, ConnectButton } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
+import { isValidSuiAddress } from '@mysten/sui/utils';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -203,9 +204,17 @@ export default function CreateEscrowPage() {
                             <Form.Item
                                 label={<span className="font-semibold text-gray-700">{role === 'buyer' ? 'Địa chỉ ví Người Bán (Seller)' : 'Địa chỉ ví Người Mua (Buyer)'}</span>}
                                 name="counterpartyAddress"
+                                hasFeedback
                                 rules={[
                                     { required: true, message: 'Vui lòng nhập địa chỉ ví đối tác!' },
-                                    { pattern: /^0x[a-fA-F0-9]{64}$|^0x[a-fA-F0-9]{40,}$/, message: 'Địa chỉ ví Sui không hợp lệ (Phải bắt đầu bằng 0x...)' }
+                                    {
+                                        validator: (_, value) => {
+                                            if (!value || isValidSuiAddress(value)) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject(new Error('Địa chỉ ví Sui không hợp lệ!'));
+                                        }
+                                    }
                                 ]}
                                 tooltip="Địa chỉ ví Sui của đối tác giao dịch."
                             >

@@ -9,7 +9,6 @@ import {
     DashboardOutlined,
     HistoryOutlined,
     SettingOutlined,
-    SafetyCertificateOutlined,
     PlusOutlined
 } from '@ant-design/icons';
 import Link from 'next/link';
@@ -37,12 +36,6 @@ export default function DashboardLayout({
             key: '/dashboard',
             icon: <DashboardOutlined />,
             label: 'Tổng quan',
-        },
-        // Removed 'Create Transaction' from menu items as per user request
-        {
-            key: '/dashboard/escrow',
-            icon: <SafetyCertificateOutlined />,
-            label: 'Escrow của tôi',
         },
         {
             key: '/dashboard/history',
