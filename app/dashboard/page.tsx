@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Table, Tag, Button, Tabs, Card, Statistic, Space, ConfigProvider, theme } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
@@ -35,6 +35,14 @@ const mockData: { asBuyer: Transaction[]; asSeller: Transaction[] } = {
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('buyer');
+    const [address, setAddress] = useState<string | null>(null);
+
+    useEffect(() => {
+        const storedAddress = window.localStorage.getItem("sui_address");
+        if (storedAddress) {
+            setAddress(storedAddress);
+        }
+    }, []);
 
     // Columns definition wrapped in useMemo to prevent unnecessary re-renders
     const columns: ColumnsType<Transaction> = useMemo(() => [
@@ -100,7 +108,9 @@ const Dashboard = () => {
                             <WalletOutlined className="text-[#003366] text-xl" />
                             <div className="text-right">
                                 <p className="text-[10px] uppercase text-gray-400 font-bold m-0 leading-tight">Connected Wallet</p>
-                                <p className="text-sm font-mono font-medium m-0 text-[#003366]">0x71C...8921</p>
+                                <p className="text-sm font-mono font-medium m-0 text-[#003366]">
+                                    {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Not Connected'}
+                                </p>
                             </div>
                         </div>
                         <Button
@@ -117,16 +127,16 @@ const Dashboard = () => {
                 {/* Summary Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                     <Card className="border-l-4 border-l-blue-500 shadow-sm hover:shadow-md transition-shadow">
-                        <Statistic title="Total Locked" value={1700} precision={2} suffix="USDC" valueStyle={{ color: BRAND_COLOR, fontWeight: 'bold' }} />
+                        <Statistic title="Total Locked" value={1700} precision={2} suffix="USDC" styles={{ content: { color: BRAND_COLOR, fontWeight: 'bold' } }} />
                     </Card>
                     <Card className="border-l-4 border-l-green-500 shadow-sm hover:shadow-md transition-shadow">
-                        <Statistic title="Active Deals" value={3} prefix={<ClockCircleOutlined />} valueStyle={{ color: BRAND_COLOR, fontWeight: 'bold' }} />
+                        <Statistic title="Active Deals" value={3} prefix={<ClockCircleOutlined />} styles={{ content: { color: BRAND_COLOR, fontWeight: 'bold' } }} />
                     </Card>
                     <Card className="border-l-4 border-l-gray-400 shadow-sm hover:shadow-md transition-shadow">
-                        <Statistic title="Completed" value={12} prefix={<CheckCircleOutlined />} valueStyle={{ color: BRAND_COLOR, fontWeight: 'bold' }} />
+                        <Statistic title="Completed" value={12} prefix={<CheckCircleOutlined />} styles={{ content: { color: BRAND_COLOR, fontWeight: 'bold' } }} />
                     </Card>
                     <Card className="border-l-4 border-l-orange-400 shadow-sm hover:shadow-md transition-shadow">
-                        <Statistic title="Expiring Soon" value={1} valueStyle={{ color: '#faad14', fontWeight: 'bold' }} />
+                        <Statistic title="Expiring Soon" value={1} styles={{ content: { color: '#faad14', fontWeight: 'bold' } }} />
                     </Card>
                 </div>
 
@@ -145,6 +155,7 @@ const Dashboard = () => {
                                 ),
                                 children: (
                                     <Table
+                                        rowKey="id"
                                         columns={columns}
                                         dataSource={mockData.asBuyer}
                                         pagination={false}
@@ -162,6 +173,7 @@ const Dashboard = () => {
                                 ),
                                 children: (
                                     <Table
+                                        rowKey="id"
                                         columns={columns}
                                         dataSource={mockData.asSeller}
                                         pagination={false}

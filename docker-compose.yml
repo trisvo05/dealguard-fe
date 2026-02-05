@@ -1,0 +1,24 @@
+services:
+  app:
+    container_name: dealguard-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: deps # Use deps stage which has pnpm/npm installed and verified
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env.local
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: npm run dev
+    networks:
+      - dealguard-network
+
+networks:
+  dealguard-network:
+    driver: bridge
