@@ -8,7 +8,7 @@ export interface LogMessage {
   id: string;
   time: string;
   content: string;
-  type: 'info' | 'success';
+  type: 'info' | 'success' | 'warning' | 'error';
 }
 
 interface ActivityLogBubbleProps {
@@ -73,7 +73,11 @@ export function ActivityLogBubble({ logs }: ActivityLogBubbleProps) {
                 <Avatar 
                     size="small" 
                     icon={<RobotOutlined />} 
-                    className={log.type === 'success' ? 'bg-green-500' : 'bg-blue-500'} 
+                    className={
+                        log.type === 'success' ? 'bg-green-500' : 
+                        log.type === 'error' ? 'bg-red-500' :
+                        log.type === 'warning' ? 'bg-amber-500' : 'bg-blue-500'
+                    } 
                 />
                 <div className="flex flex-col max-w-[85%]">
                     <div className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 text-sm text-gray-700">
